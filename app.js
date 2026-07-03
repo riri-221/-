@@ -264,16 +264,6 @@ const PALETTE_VALUE_OPTIONS_BY_FINISH = buildPaletteValueOptionsByFinish();
 
 const DEFAULT_COLOR_GUIDE_ENTRIES = [
     {
-        id: "hangure-orange",
-        category: "半グレ",
-        name: "オレンジ",
-        accent: "半グレ",
-        details: [{ label: "メイン", value: "カメレオン / オレンジ/パープル フリップ" }],
-        swatches: [{ label: "オレンジ/パープル フリップ", hex: "#FF9724", hexB: "#7E3FE7" }],
-        note: "",
-        custom: false,
-    },
-    {
         id: "hangure-lavender",
         category: "半グレ",
         name: "ラベンダー",
@@ -334,28 +324,6 @@ const DEFAULT_COLOR_GUIDE_ENTRIES = [
         custom: false,
     },
     {
-        id: "gang-eva",
-        category: "ギャング",
-        name: "E.V.A",
-        accent: "紫",
-        details: [
-            { label: "メイン", value: "クラシック / RGB(98, 0, 255)" },
-            { label: "サブ候補 1", value: "クラシック / RGB(86, 143, 0)" },
-            { label: "サブ候補 2", value: "クラシック / RGB(98, 0, 255)" },
-            { label: "パール", value: "メタリック / ブラック" },
-            { label: "ホイール", value: "メタリック / ライムグリーン" },
-        ],
-        swatches: [
-            { label: "RGB(98, 0, 255)", hex: "#6200FF" },
-            { label: "RGB(86, 143, 0)", hex: "#568F00" },
-            { label: "ライムグリーン", hex: "#74CF30" },
-        ],
-        pickerRgb: "RGB(98, 0, 255)",
-        pickerHex: "#6200FF",
-        note: "",
-        custom: false,
-    },
-    {
         id: "gang-404",
         category: "ギャング",
         name: "404 Not found",
@@ -384,16 +352,6 @@ const DEFAULT_COLOR_GUIDE_ENTRIES = [
         custom: false,
     },
     {
-        id: "gang-unison",
-        category: "ギャング",
-        name: "Unison",
-        accent: "赤色",
-        details: [{ label: "メイン / サブ", value: "メタリック / フォーミュラレッド" }],
-        swatches: [{ label: "フォーミュラレッド", hex: "#C31B21" }],
-        note: "",
-        custom: false,
-    },
-    {
         id: "gang-amber",
         category: "ギャング",
         name: "Amber",
@@ -413,6 +371,42 @@ const DEFAULT_COLOR_GUIDE_ENTRIES = [
         note: "",
         custom: false,
     },
+    {
+        id: "gang-momiji-orange",
+        category: "ギャング",
+        name: "椛",
+        accent: "オレンジ",
+        details: [
+            { label: "メイン", value: "メタリック / 138.ブライトオレンジ" },
+            { label: "サブ", value: "メタリック / 138.ブライトオレンジ" },
+            { label: "パール", value: "メタリック / 88.イエロー" },
+        ],
+        swatches: [
+            { label: "138.ブライトオレンジ", hex: "#FF6F00" },
+            { label: "88.イエロー", hex: "#FFD21F" },
+        ],
+        note: "",
+        custom: false,
+    },
+    {
+        id: "hangure-purple",
+        category: "半グレ",
+        name: "むらさき",
+        accent: "紫色",
+        details: [
+            { label: "メイン", value: "マット / RGB(100, 0, 171) / #6400AB" },
+            { label: "サブ", value: "マット / RGB(100, 0, 171)" },
+            { label: "パール", value: "マット / 12.マットブラック" },
+        ],
+        swatches: [
+            { label: "RGB(100, 0, 171)", hex: "#6400AB" },
+            { label: "12.マットブラック", hex: "#141414" },
+        ],
+        pickerRgb: "RGB(100, 0, 171)",
+        pickerHex: "#6400AB",
+        note: "",
+        custom: false,
+    },
 ];
 
 const DEFAULT_NOTES = {
@@ -421,19 +415,9 @@ const DEFAULT_NOTES = {
     updatedAt: "",
 };
 
-const COLOR_GUIDE_SEED_VERSION = "2026-06-02-requested-entries-v1";
+const COLOR_GUIDE_SEED_VERSION = "2026-07-04-momiji-purple-v1";
 
 const COLOR_GUIDE_SEED_ENTRIES = [
-    {
-        id: "seed-hangure-orange-20260602",
-        category: "半グレ",
-        name: "オレンジ",
-        accent: "半グレ",
-        details: [{ label: "メイン", value: "カメレオン / 31.オレンジ/パープル フリップ" }],
-        swatches: [{ label: "31.オレンジ/パープル フリップ", hex: "#FF9724", hexB: "#7E3FE7" }],
-        note: "",
-        custom: true,
-    },
     {
         id: "seed-hangure-lavender-20260602",
         category: "半グレ",
@@ -495,28 +479,6 @@ const COLOR_GUIDE_SEED_ENTRIES = [
         custom: true,
     },
     {
-        id: "seed-gang-eva-20260602",
-        category: "ギャング",
-        name: "E.V.A",
-        accent: "紫",
-        details: [
-            { label: "メイン", value: "クラシック / RGB(98, 0, 255)" },
-            { label: "サブ候補 1", value: "クラシック / RGB(86, 143, 0)" },
-            { label: "サブ候補 2", value: "クラシック / RGB(98, 0, 255)" },
-            { label: "パール", value: "メタリック / 1.ブラック" },
-            { label: "ホイール", value: "メタリック / 42.ライムグリーン" },
-        ],
-        swatches: [
-            { label: "RGB(98, 0, 255)", hex: "#6200FF" },
-            { label: "RGB(86, 143, 0)", hex: "#568F00" },
-            { label: "42.ライムグリーン", hex: "#74CF30" },
-        ],
-        pickerRgb: "RGB(98, 0, 255)",
-        pickerHex: "#6200FF",
-        note: "",
-        custom: true,
-    },
-    {
         id: "seed-gang-404-not-found-20260602",
         category: "ギャング",
         name: "404 Not found",
@@ -545,16 +507,6 @@ const COLOR_GUIDE_SEED_ENTRIES = [
         custom: true,
     },
     {
-        id: "seed-gang-unison-20260602",
-        category: "ギャング",
-        name: "Unison",
-        accent: "赤色",
-        details: [{ label: "メイン / サブ", value: "メタリック / 16.フォーミュラレッド" }],
-        swatches: [{ label: "16.フォーミュラレッド", hex: "#C31B21" }],
-        note: "",
-        custom: true,
-    },
-    {
         id: "seed-gang-amber-20260602",
         category: "ギャング",
         name: "Amber",
@@ -574,7 +526,58 @@ const COLOR_GUIDE_SEED_ENTRIES = [
         note: "",
         custom: true,
     },
+    {
+        id: "seed-gang-momiji-orange-20260704",
+        category: "ギャング",
+        name: "椛",
+        accent: "オレンジ",
+        details: [
+            { label: "メイン", value: "メタリック / 138.ブライトオレンジ" },
+            { label: "サブ", value: "メタリック / 138.ブライトオレンジ" },
+            { label: "パール", value: "メタリック / 88.イエロー" },
+        ],
+        swatches: [
+            { label: "138.ブライトオレンジ", hex: "#FF6F00" },
+            { label: "88.イエロー", hex: "#FFD21F" },
+        ],
+        note: "",
+        custom: true,
+    },
+    {
+        id: "seed-hangure-purple-20260704",
+        category: "半グレ",
+        name: "むらさき",
+        accent: "紫色",
+        details: [
+            { label: "メイン", value: "マット / RGB(100, 0, 171) / #6400AB" },
+            { label: "サブ", value: "マット / RGB(100, 0, 171)" },
+            { label: "パール", value: "マット / 12.マットブラック" },
+        ],
+        swatches: [
+            { label: "RGB(100, 0, 171)", hex: "#6400AB" },
+            { label: "12.マットブラック", hex: "#141414" },
+        ],
+        pickerRgb: "RGB(100, 0, 171)",
+        pickerHex: "#6400AB",
+        note: "",
+        custom: true,
+    },
 ];
+
+const REMOVED_COLOR_GUIDE_ENTRY_IDS = new Set([
+    "hangure-orange",
+    "seed-hangure-orange-20260602",
+    "gang-eva",
+    "seed-gang-eva-20260602",
+    "gang-unison",
+    "seed-gang-unison-20260602",
+]);
+
+const REMOVED_COLOR_GUIDE_ENTRY_KEYS = new Set([
+    "半グレ::オレンジ",
+    "ギャング::E.V.A",
+    "ギャング::Unison",
+]);
 
 const state = {
     currentView: "home",
@@ -2217,9 +2220,8 @@ function mergeColorGuideEntries(storedEntries) {
     }
 
     return storedEntries
-        .filter((entry) => !defaultIds.has(String(entry?.id || "")))
         .map((entry) => sanitizeColorGuideEntry(entry))
-        .filter(Boolean);
+        .filter((entry) => entry && !defaultIds.has(entry.id) && !isRemovedColorGuideEntry(entry));
 }
 
 function seedColorGuideEntriesOnce(entries) {
@@ -2253,6 +2255,19 @@ function seedColorGuideEntriesOnce(entries) {
 
 function buildColorGuideSeedMatchKey(entry) {
     return `${String(entry?.category || "").trim()}::${String(entry?.name || "").trim()}`;
+}
+
+function isRemovedColorGuideEntry(entry) {
+    if (!entry) {
+        return false;
+    }
+
+    const id = String(entry.id || "").trim();
+    if (REMOVED_COLOR_GUIDE_ENTRY_IDS.has(id)) {
+        return true;
+    }
+
+    return REMOVED_COLOR_GUIDE_ENTRY_KEYS.has(buildColorGuideSeedMatchKey(entry));
 }
 
 function cloneColorGuideEntries(entries) {

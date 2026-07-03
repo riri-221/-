@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ラフシティメカニックシート</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="app-shell">
+        <header class="hero-panel">
+            <div class="hero-copy">
+                <p class="eyebrow">ROUGH CITY MECHANIC</p>
+                <h1>ラフシティメカニックシート</h1>
+                <p class="hero-text">
+                    FiveM の中ではなく、ブラウザ単体で動くローカルアプリです。
+                    file で直接開けるのでオフラインでも使えます。
+                    価格表はこのアプリ内で編集して保存、オーダーシートは貼り付けるだけで必要アイテムと請求候補を確認できます。
+                    メモ欄も追加しているので、作業中の補足や下書きも同じ場所に残せます。
+                </p>
+            </div>
+            <div class="hero-side">
+                <div class="hero-logo-shell">
+                    <img src="./logo.png" alt="ROUGH CITY ロゴ" onerror="this.parentElement.hidden = true;">
+                </div>
+                <div class="hero-actions">
+                    <button class="ghost-button" type="button" data-view-target="billing">請求金額</button>
+                    <button class="ghost-button" type="button" data-view-target="order">オーダーシート</button>
+                    <button class="ghost-button" type="button" data-view-target="notes">メモ欄</button>
+                    <button class="ghost-button" type="button" data-view-target="colors">半グレ、ギャングカラー</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="workspace">
+            <section class="view view-active" id="home">
+                <div class="mode-grid">
+                    <article class="mode-card mode-card-billing">
+                        <p class="mode-kicker">MODE 01</p>
+                        <h2>請求金額</h2>
+                        <p>
+                            対象にチェックを付けて数量と単価を見ながら合計を出します。
+                            金額はその場で変更でき、ローカル保存と JSON 書き出しにも対応しています。
+                        </p>
+                        <button class="mode-button" type="button" data-view-target="billing">請求金額を開く</button>
+                    </article>
+
+                    <article class="mode-card mode-card-order">
+                        <p class="mode-kicker">MODE 02</p>
+                        <h2>オーダーシート解析</h2>
+                        <p>
+                            jim-mechanic の mechboard からコピーした内容を貼り付けると、
+                            カスタム項目と必要アイテムを一覧化し、請求候補にも反映できます。
+                        </p>
+                        <button class="mode-button" type="button" data-view-target="order">オーダーシートを開く</button>
+                    </article>
+
+                    <article class="mode-card mode-card-colors">
+                        <p class="mode-kicker">MODE 03</p>
+                        <h2>半グレ、ギャングカラー</h2>
+                        <p>
+                            半グレとギャングのカラー指定を一覧で確認して、
+                            jim-mechanic 名義の内容を見返したり新規追記できます。
+                        </p>
+                        <button class="mode-button" type="button" data-view-target="colors">カラー表を開く</button>
+                    </article>
+
+                    <article class="mode-card mode-card-notes">
+                        <p class="mode-kicker">MODE 04</p>
+                        <h2>メモ欄</h2>
+                        <p>
+                            作業メモ、連絡事項、請求前の下書きを残せるローカル保存ページです。
+                            JSON の書き出しと取り込みにも対応しています。
+                        </p>
+                        <button class="mode-button" type="button" data-view-target="notes">メモ欄を開く</button>
+                    </article>
+                </div>
+
+            </section>
+
+            <section class="view" id="billing">
+                <div class="panel-grid billing-layout">
+                    <aside class="side-panel">
+                        <div class="panel-block sticky-block">
+                            <p class="section-kicker">BILLING</p>
+                            <h2>請求金額</h2>
+                        </div>
+
+                        <div class="summary-card billing-summary-card">
+                            <div>
+                                <span class="summary-label">選択セル数</span>
+                                <strong id="selectedRowCount">0</strong>
+                            </div>
+                            <div>
+                                <span class="summary-label">外装 / 塗装口数</span>
+                                <strong id="selectedUnitCount">0</strong>
+                            </div>
+                            <div>
+                                <span class="summary-label">請求合計</span>
+                                <strong class="summary-total copyable-total" id="billingGrandTotal" role="button" tabindex="0" title="数字のみコピー">¥0</strong>
+                            </div>
+                            <div class="billing-summary-extra">
+                                <div>
+                                    <span class="summary-label">白パス適用金額</span>
+                                    <strong class="summary-secondary-total copyable-total" id="whitePassTotal" role="button" tabindex="0" title="数字のみコピー">¥0</strong>
+                                </div>
+                                <div>
+                                    <span class="summary-label">適用外金額</span>
+                                    <strong id="whitePassExcludedTotal">¥0</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel-block action-stack">
+                            <button class="primary-button" type="button" id="resetBillingSelectionButton">チェックをリセット</button>
+                            <button class="ghost-button" type="button" id="resetBillingCatalogButton">金額を初期化</button>
+                            <button class="ghost-button" type="button" id="exportBillingConfigButton">価格設定を JSON 出力</button>
+                            <button class="ghost-button" type="button" id="importBillingConfigButton">価格設定を JSON 取込</button>
+                            <input type="file" id="billingImportInput" accept="application/json,.json" hidden>
+                        </div>
+                    </aside>
+
+                    <section class="main-panel billing-main-panel">
+                        <div id="billingSpreadsheet" class="billing-spreadsheet"></div>
+                    </section>
+                </div>
+            </section>
+
+            <section class="view" id="order">
+                <div class="panel-grid order-layout">
+                    <aside class="side-panel">
+                        <div class="panel-block sticky-block">
+                            <p class="section-kicker">ORDER SHEET</p>
+                            <h2>オーダーシート解析</h2>
+                            <p class="muted-text">
+                                mechboard の Copy Parts List を貼り付けてください。
+                            </p>
+                        </div>
+
+                        <section class="result-panel order-input-panel">
+                            <div class="result-panel-header">
+                                <h3>貼り付け内容を確認</h3>
+                            </div>
+                            <textarea id="orderInput" class="sheet-input order-sheet-input" placeholder="ここに mechboard の内容を貼り付け"></textarea>
+                        </section>
+
+                        <div class="panel-block action-stack">
+                            <button class="primary-button" type="button" id="parseOrderButton">貼り付け内容を解析</button>
+                            <button class="ghost-button" type="button" id="applyOrderToBillingButton" disabled>請求金額へ反映</button>
+                            <button class="ghost-button" type="button" id="resetOrderButton">内容をリセット</button>
+                        </div>
+
+                        <div class="summary-card compact-summary order-summary-card">
+                            <div>
+                                <span class="summary-label">解析行数</span>
+                                <strong id="orderLineCount">0</strong>
+                            </div>
+                            <div>
+                                <span class="summary-label">必要アイテム数</span>
+                                <strong id="requiredItemCount">0</strong>
+                            </div>
+                            <div>
+                                <span class="summary-label">請求想定額</span>
+                                <strong class="summary-total copyable-total" id="estimatedOrderTotal" role="button" tabindex="0" title="数字のみコピー">¥0</strong>
+                            </div>
+                        </div>
+
+                        <section class="result-panel warning-panel order-unknown-panel">
+                            <div class="result-panel-header">
+                                <h3>未判定の行</h3>
+                                <span class="pill warning-pill" id="unknownOrderCount">0件</span>
+                            </div>
+                            <div id="unknownOrderEntries" class="entry-stack empty-state">
+                                未判定の行はありません。
+                            </div>
+                        </section>
+
+                    </aside>
+
+                    <section class="main-panel order-main-panel">
+                            <section class="result-panel order-custom-panel">
+                                <div class="result-panel-header">
+                                    <h3>カスタム項目</h3>
+                                    <div class="result-pill-row">
+                                        <span class="pill" id="matchedOrderCount">0件</span>
+                                        <span class="pill" id="uniqueRequiredItemCount">0種</span>
+                                    </div>
+                                </div>
+                                <div id="orderEntries" class="entry-stack empty-state">
+                                    貼り付けてから解析すると、ここにカスタム内容と必要アイテムが表示されます。
+                                </div>
+                            </section>
+
+                            <section class="result-panel order-required-panel">
+                                <div class="result-panel-header">
+                                    <h3>必要アイテム合計</h3>
+                                    <div class="result-pill-row">
+                                        <span class="pill" id="requiredItemUnitTotal">0個</span>
+                                        <span class="pill" id="requiredItemTypeTotal">0種</span>
+                                    </div>
+                                </div>
+                                <div id="requiredItemEntries" class="required-grid empty-state">
+                                    貼り付けてから解析すると、ここに必要アイテムの合計が表示されます。
+                                </div>
+                            </section>
+                    </section>
+                </div>
+            </section>
+
+            <section class="view" id="notes">
+                <div class="panel-grid notes-layout">
+                    <aside class="side-panel">
+                        <div class="panel-block sticky-block">
+                            <p class="section-kicker">MEMO</p>
+                            <h2>メモ欄</h2>
+                            <p class="muted-text">
+                                請求前の下書き、オーダーの補足、連絡事項を残すためのページです。
+                                入力した内容はこのブラウザに自動保存されます。
+                            </p>
+                        </div>
+
+                        <div class="summary-card compact-summary notes-summary-card">
+                            <div>
+                                <span class="summary-label">タイトル</span>
+                                <strong id="notesTitleState">未入力</strong>
+                            </div>
+                            <div>
+                                <span class="summary-label">本文行数</span>
+                                <strong id="notesLineCount">0行</strong>
+                            </div>
+                            <div>
+                                <span class="summary-label">文字数</span>
+                                <strong class="summary-total" id="notesCharCount">0字</strong>
+                            </div>
+                        </div>
+
+                        <div class="panel-block action-stack">
+                            <button class="primary-button" type="button" id="copyNotesButton">メモをコピー</button>
+                            <button class="ghost-button" type="button" id="clearNotesButton">内容をクリア</button>
+                            <button class="ghost-button" type="button" id="exportNotesButton">メモを JSON 出力</button>
+                            <button class="ghost-button" type="button" id="importNotesButton">メモを JSON 取込</button>
+                            <input type="file" id="notesImportInput" accept="application/json,.json,text/plain,.txt,.md" hidden>
+                        </div>
+                    </aside>
+
+                    <section class="main-panel notes-main-panel">
+                        <section class="result-panel notes-editor-panel">
+                            <div class="result-panel-header">
+                                <div>
+                                    <h3>作業メモ</h3>
+                                    <p class="muted-text">入力すると自動でローカル保存されます。</p>
+                                </div>
+                                <span class="pill notes-save-pill" id="notesSaveStatus">空欄</span>
+                            </div>
+
+                            <label class="notes-field">
+                                <span>タイトル</span>
+                                <input id="notesTitleInput" class="text-input" type="text" placeholder="例: 今日の請求メモ">
+                            </label>
+
+                            <label class="notes-field">
+                                <span>本文</span>
+                                <textarea id="notesBodyInput" class="sheet-input notes-textarea" placeholder="ここに自由にメモを書けます。"></textarea>
+                            </label>
+                        </section>
+                    </section>
+                </div>
+            </section>
+
+            <section class="view" id="colors">
+                <div class="palette-guide-layout">
+                    <section class="result-panel palette-guide-hero">
+                        <p class="section-kicker">COLOR GUIDE</p>
+                        <h2>半グレ、ギャングカラー</h2>
+                        <p class="muted-text">
+                            半グレとギャングの車両カラー指定をまとめた参照ページです。
+                            jim-mechanic のカラー名で確認できて、RGB と HEX はボタンからコピーできます。
+                            右側から新規カラー追加と JSON の書き出し、読み込みができます。
+                        </p>
+                    </section>
+
+                    <div class="palette-guide-workspace">
+                        <aside class="result-panel palette-editor-panel">
+                            <div class="result-panel-header">
+                                <div>
+                                    <p class="mode-kicker">ADD ENTRY</p>
+                                    <h3>新規カラーを追加</h3>
+                                </div>
+                            </div>
+
+                            <form id="paletteEntryForm" class="palette-editor-form">
+                                <label class="palette-field">
+                                    <span>区分</span>
+                                    <select id="paletteCategoryInput" class="text-input">
+                                        <option value="半グレ">半グレ</option>
+                                        <option value="ギャング">ギャング</option>
+                                    </select>
+                                </label>
+
+                                <label class="palette-field">
+                                    <span>名称</span>
+                                    <input id="paletteNameInput" class="text-input" type="text" placeholder="例: Honey Glow">
+                                </label>
+
+                                <label class="palette-field">
+                                    <span>色タグ</span>
+                                    <input id="paletteAccentInput" class="text-input" type="text" placeholder="例: 黄色">
+                                </label>
+
+                                <div class="palette-detail-builder">
+                                    <div class="palette-detail-builder-copy">
+                                        <strong>カラー指定</strong>
+                                        <p>メイン、サブ、パール、ホイールを押すと入力欄が開きます。jim-mechanic は種類に合う値だけ選べて、RGB / HEX を使う時だけ値を直接入力してください。</p>
+                                    </div>
+
+                                    <details class="palette-detail-row" data-role="palette-detail-section">
+                                        <summary class="palette-detail-row-summary">
+                                            <span class="palette-detail-row-title">メイン</span>
+                                        </summary>
+                                        <div class="palette-detail-row-fields">
+                                            <label class="palette-inline-field">
+                                                <span>記載方式</span>
+                                                <select id="paletteMainModeInput" class="text-input" data-role="palette-detail-mode">
+                                                    <option value="jm" selected>jim-mechanic</option>
+                                                    <option value="rgb">RGB</option>
+                                                    <option value="hex">HEX</option>
+                                                </select>
+                                            </label>
+                                            <label class="palette-inline-field">
+                                                <span>種類</span>
+                                                <select id="paletteMainFinishInput" class="text-input" data-role="palette-detail-finish">
+                                                    <option value="純正">純正</option>
+                                                    <option value="クラシック">クラシック</option>
+                                                    <option value="マット">マット</option>
+                                                    <option value="メタリック" selected>メタリック</option>
+                                                    <option value="メタル">メタル</option>
+                                                    <option value="カメレオン">カメレオン</option>
+                                                </select>
+                                            </label>
+                                            <label class="palette-inline-field palette-inline-field-wide">
+                                                <span>値</span>
+                                                <select id="paletteMainValueSelect" class="text-input"></select>
+                                                <input id="paletteMainValueInput" class="text-input" type="text" placeholder="例: RGB(190, 72, 130)" hidden>
+                                            </label>
+                                        </div>
+                                    </details>
+
+                                    <details class="palette-detail-row" data-role="palette-detail-section">
+                                        <summary class="palette-detail-row-summary">
+                                            <span class="palette-detail-row-title">サブ</span>
+                                        </summary>
+                                        <div class="palette-detail-row-fields">
+                                            <label class="palette-inline-field">
+                                                <span>記載方式</span>
+                                                <select id="paletteSecondaryModeInput" class="text-input" data-role="palette-detail-mode">
+                                                    <option value="jm" selected>jim-mechanic</option>
+                                                    <option value="rgb">RGB</option>
+                                                    <option value="hex">HEX</option>
+                                                </select>
+                                            </label>
+                                            <label class="palette-inline-field">
+                                                <span>種類</span>
+                                                <select id="paletteSecondaryFinishInput" class="text-input" data-role="palette-detail-finish">
+                                                    <option value="純正">純正</option>
+                                                    <option value="クラシック">クラシック</option>
+                                                    <option value="マット">マット</option>
+                                                    <option value="メタリック" selected>メタリック</option>
+                                                    <option value="メタル">メタル</option>
+                                                    <option value="カメレオン">カメレオン</option>
+                                                </select>
+                                            </label>
+                                            <label class="palette-inline-field palette-inline-field-wide">
+                                                <span>値</span>
+                                                <select id="paletteSecondaryValueSelect" class="text-input"></select>
+                                                <input id="paletteSecondaryValueInput" class="text-input" type="text" placeholder="例: RGB(190, 72, 130)" hidden>
+                                            </label>
+                                        </div>
+                                    </details>
+
+                                    <details class="palette-detail-row" data-role="palette-detail-section">
+                                        <summary class="palette-detail-row-summary">
+                                            <span class="palette-detail-row-title">パール</span>
+                                        </summary>
+                                        <div class="palette-detail-row-fields">
+                                            <label class="palette-inline-field">
+                                                <span>記載方式</span>
+                                                <select id="palettePearlModeInput" class="text-input" data-role="palette-detail-mode">
+                                                    <option value="jm" selected>jim-mechanic</option>
+                                                    <option value="rgb">RGB</option>
+                                                    <option value="hex">HEX</option>
+                                                </select>
+                                            </label>
+                                            <label class="palette-inline-field">
+                                                <span>種類</span>
+                                                <select id="palettePearlFinishInput" class="text-input" data-role="palette-detail-finish">
+                                                    <option value="純正">純正</option>
+                                                    <option value="クラシック">クラシック</option>
+                                                    <option value="マット">マット</option>
+                                                    <option value="メタリック">メタリック</option>
+                                                    <option value="メタル">メタル</option>
+                                                    <option value="カメレオン" selected>カメレオン</option>
+                                                </select>
+                                            </label>
+                                            <label class="palette-inline-field palette-inline-field-wide">
+                                                <span>値</span>
+                                                <select id="palettePearlValueSelect" class="text-input"></select>
+                                                <input id="palettePearlValueInput" class="text-input" type="text" placeholder="例: RGB(190, 72, 130)" hidden>
+                                            </label>
+                                        </div>
+                                    </details>
+
+                                    <details class="palette-detail-row" data-role="palette-detail-section">
+                                        <summary class="palette-detail-row-summary">
+                                            <span class="palette-detail-row-title">ホイール</span>
+                                        </summary>
+                                        <div class="palette-detail-row-fields">
+                                            <label class="palette-inline-field">
+                                                <span>記載方式</span>
+                                                <select id="paletteWheelModeInput" class="text-input" data-role="palette-detail-mode">
+                                                    <option value="jm" selected>jim-mechanic</option>
+                                                    <option value="rgb">RGB</option>
+                                                    <option value="hex">HEX</option>
+                                                </select>
+                                            </label>
+                                            <label class="palette-inline-field">
+                                                <span>種類</span>
+                                                <select id="paletteWheelFinishInput" class="text-input" data-role="palette-detail-finish">
+                                                    <option value="純正">純正</option>
+                                                    <option value="クラシック">クラシック</option>
+                                                    <option value="マット">マット</option>
+                                                    <option value="メタリック" selected>メタリック</option>
+                                                    <option value="メタル">メタル</option>
+                                                    <option value="カメレオン">カメレオン</option>
+                                                </select>
+                                            </label>
+                                            <label class="palette-inline-field palette-inline-field-wide">
+                                                <span>値</span>
+                                                <select id="paletteWheelValueSelect" class="text-input"></select>
+                                                <input id="paletteWheelValueInput" class="text-input" type="text" placeholder="例: RGB(190, 72, 130)" hidden>
+                                            </label>
+                                        </div>
+                                    </details>
+                                </div>
+
+                                <div class="palette-swatch-grid">
+                                    <label class="palette-field palette-swatch-field">
+                                        <span>チップ 1</span>
+                                        <div class="palette-swatch-input-row">
+                                            <input id="paletteChipPrimaryPicker" class="palette-color-picker" type="color" value="#be4882" data-role="palette-chip-picker">
+                                            <div class="palette-swatch-code-field">
+                                                <select id="paletteChipPrimaryModeInput" class="text-input" data-role="palette-chip-mode">
+                                                    <option value="hex" selected>HEX</option>
+                                                    <option value="rgb">RGB</option>
+                                                </select>
+                                                <input id="paletteChipPrimaryInput" class="text-input" type="text" placeholder="#BE4882" data-role="palette-chip-value">
+                                            </div>
+                                        </div>
+                                    </label>
+
+                                    <label class="palette-field palette-swatch-field">
+                                        <span>チップ 2</span>
+                                        <div class="palette-swatch-input-row">
+                                            <input id="paletteChipSecondaryPicker" class="palette-color-picker" type="color" value="#5a5a5a" data-role="palette-chip-picker">
+                                            <div class="palette-swatch-code-field">
+                                                <select id="paletteChipSecondaryModeInput" class="text-input" data-role="palette-chip-mode">
+                                                    <option value="hex" selected>HEX</option>
+                                                    <option value="rgb">RGB</option>
+                                                </select>
+                                                <input id="paletteChipSecondaryInput" class="text-input" type="text" placeholder="#5A5A5A" data-role="palette-chip-value">
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <label class="palette-field">
+                                    <span>追加詳細</span>
+                                    <textarea id="paletteExtraDetailsInput" class="sheet-input palette-editor-textarea" placeholder="1 行 1 項目。例: サブ候補 2: クラシック / RGB(98, 0, 255)"></textarea>
+                                </label>
+
+                                <div class="palette-editor-actions">
+                                    <button class="mode-button" type="submit">新規追加</button>
+                                    <button class="ghost-button" type="button" id="resetPaletteFormButton">入力をクリア</button>
+                                </div>
+
+                                <div class="palette-json-actions">
+                                    <button class="ghost-button" type="button" id="exportPaletteConfigButton">JSON を書き出し</button>
+                                    <button class="ghost-button" type="button" id="importPaletteConfigButton">JSON を読み込み</button>
+                                    <input id="paletteImportInput" type="file" accept="application/json" hidden>
+                                </div>
+                            </form>
+
+                        </aside>
+
+                        <div class="palette-content-stack">
+                            <section class="result-panel palette-group-panel">
+                                <div class="result-panel-header">
+                                    <div>
+                                        <p class="mode-kicker">CATEGORY 01</p>
+                                        <h3>ギャング</h3>
+                                    </div>
+                                    <span class="pill" id="paletteGangCount">0件</span>
+                                </div>
+
+                                <div id="paletteGangEntries" class="palette-card-grid"></div>
+                            </section>
+
+                            <section class="result-panel palette-group-panel">
+                                <div class="result-panel-header">
+                                    <div>
+                                        <p class="mode-kicker">CATEGORY 02</p>
+                                        <h3>半グレ</h3>
+                                    </div>
+                                    <span class="pill" id="paletteSemiCount">0件</span>
+                                </div>
+
+                                <div id="paletteSemiEntries" class="palette-card-grid"></div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <template id="billingGroupTemplate">
+        <section class="group-card">
+            <div class="group-header">
+                <div>
+                    <h3 class="group-title"></h3>
+                    <p class="group-subtitle"></p>
+                </div>
+            </div>
+            <div class="group-items"></div>
+        </section>
+    </template>
+
+    <script src="./app.js"></script>
+</body>
+</html>

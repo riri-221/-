@@ -264,24 +264,6 @@ const PALETTE_VALUE_OPTIONS_BY_FINISH = buildPaletteValueOptionsByFinish();
 
 const DEFAULT_COLOR_GUIDE_ENTRIES = [
     {
-        id: "hangure-lavender",
-        category: "半グレ",
-        name: "ラベンダー",
-        accent: "半グレ",
-        details: [
-            { label: "メイン", value: "純正" },
-            { label: "サブ", value: "メタリック / ワインレッド" },
-            { label: "パール", value: "マット / マットブラック" },
-        ],
-        swatches: [
-            { label: "ラベンダー", hex: "#C8B3FF" },
-            { label: "ワインレッド", hex: "#6A102B" },
-            { label: "マットブラック", hex: "#1A1A1A" },
-        ],
-        note: "",
-        custom: false,
-    },
-    {
         id: "gang-ohio",
         category: "ギャング",
         name: "Ｏ h i o",
@@ -379,12 +361,8 @@ const DEFAULT_COLOR_GUIDE_ENTRIES = [
         details: [
             { label: "メイン", value: "メタリック / 138.ブライトオレンジ" },
             { label: "サブ", value: "メタリック / 138.ブライトオレンジ" },
-            { label: "パール", value: "メタリック / 88.イエロー" },
         ],
-        swatches: [
-            { label: "138.ブライトオレンジ", hex: "#FF6F00" },
-            { label: "88.イエロー", hex: "#FFD21F" },
-        ],
+        swatches: [{ label: "138.ブライトオレンジ", hex: "#FF6F00" }],
         note: "",
         custom: false,
     },
@@ -407,6 +385,33 @@ const DEFAULT_COLOR_GUIDE_ENTRIES = [
         note: "",
         custom: false,
     },
+    {
+        id: "hangure-dark-red",
+        category: "半グレ",
+        name: "濃い赤",
+        accent: "濃い赤",
+        details: [{ label: "メイン / サブ", value: "メタリック / カベルネレッド" }],
+        swatches: [{ label: "カベルネレッド", hex: "#4A111A" }],
+        note: "",
+        custom: false,
+    },
+    {
+        id: "hangure-red",
+        category: "半グレ",
+        name: "赤",
+        accent: "赤",
+        details: [
+            { label: "メイン", value: "メタリック / レッド" },
+            { label: "サブ", value: "メタリック / フォーミュラレッド" },
+            { label: "パール", value: "メタリック / フォーミュラレッド" },
+        ],
+        swatches: [
+            { label: "レッド", hex: "#D11921" },
+            { label: "フォーミュラレッド", hex: "#C31B21" },
+        ],
+        note: "",
+        custom: false,
+    },
 ];
 
 const DEFAULT_NOTES = {
@@ -415,27 +420,9 @@ const DEFAULT_NOTES = {
     updatedAt: "",
 };
 
-const COLOR_GUIDE_SEED_VERSION = "2026-07-04-momiji-purple-v1";
+const COLOR_GUIDE_SEED_VERSION = "2026-07-04-hangure-reds-momiji-v1";
 
 const COLOR_GUIDE_SEED_ENTRIES = [
-    {
-        id: "seed-hangure-lavender-20260602",
-        category: "半グレ",
-        name: "ラベンダー",
-        accent: "半グレ",
-        details: [
-            { label: "メイン", value: "純正" },
-            { label: "サブ", value: "メタリック / 23.ワインレッド" },
-            { label: "パール", value: "マット / 1.マットブラック" },
-        ],
-        swatches: [
-            { label: "ラベンダー", hex: "#C8B3FF" },
-            { label: "23.ワインレッド", hex: "#6A102B" },
-            { label: "1.マットブラック", hex: "#1A1A1A" },
-        ],
-        note: "",
-        custom: true,
-    },
     {
         id: "seed-gang-ohio-20260602",
         category: "ギャング",
@@ -527,19 +514,15 @@ const COLOR_GUIDE_SEED_ENTRIES = [
         custom: true,
     },
     {
-        id: "seed-gang-momiji-orange-20260704",
+        id: "seed-gang-momiji-orange-20260704-v2",
         category: "ギャング",
         name: "椛",
         accent: "オレンジ",
         details: [
             { label: "メイン", value: "メタリック / 138.ブライトオレンジ" },
             { label: "サブ", value: "メタリック / 138.ブライトオレンジ" },
-            { label: "パール", value: "メタリック / 88.イエロー" },
         ],
-        swatches: [
-            { label: "138.ブライトオレンジ", hex: "#FF6F00" },
-            { label: "88.イエロー", hex: "#FFD21F" },
-        ],
+        swatches: [{ label: "138.ブライトオレンジ", hex: "#FF6F00" }],
         note: "",
         custom: true,
     },
@@ -562,6 +545,33 @@ const COLOR_GUIDE_SEED_ENTRIES = [
         note: "",
         custom: true,
     },
+    {
+        id: "seed-hangure-dark-red-20260704",
+        category: "半グレ",
+        name: "濃い赤",
+        accent: "濃い赤",
+        details: [{ label: "メイン / サブ", value: "メタリック / カベルネレッド" }],
+        swatches: [{ label: "カベルネレッド", hex: "#4A111A" }],
+        note: "",
+        custom: true,
+    },
+    {
+        id: "seed-hangure-red-20260704",
+        category: "半グレ",
+        name: "赤",
+        accent: "赤",
+        details: [
+            { label: "メイン", value: "メタリック / レッド" },
+            { label: "サブ", value: "メタリック / フォーミュラレッド" },
+            { label: "パール", value: "メタリック / フォーミュラレッド" },
+        ],
+        swatches: [
+            { label: "レッド", hex: "#D11921" },
+            { label: "フォーミュラレッド", hex: "#C31B21" },
+        ],
+        note: "",
+        custom: true,
+    },
 ];
 
 const REMOVED_COLOR_GUIDE_ENTRY_IDS = new Set([
@@ -571,10 +581,14 @@ const REMOVED_COLOR_GUIDE_ENTRY_IDS = new Set([
     "seed-gang-eva-20260602",
     "gang-unison",
     "seed-gang-unison-20260602",
+    "hangure-lavender",
+    "seed-hangure-lavender-20260602",
+    "seed-gang-momiji-orange-20260704",
 ]);
 
 const REMOVED_COLOR_GUIDE_ENTRY_KEYS = new Set([
     "半グレ::オレンジ",
+    "半グレ::ラベンダー",
     "ギャング::E.V.A",
     "ギャング::Unison",
 ]);

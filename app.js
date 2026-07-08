@@ -44,8 +44,8 @@ const BILLING_TIER_ROWS = [
 const BILLING_FIXED_ITEMS = [
     { id: "car_armor", label: "アーマー", icon: `${IMAGE_BASE}car_armour.png` },
     { id: "turbo", label: "ターボ", icon: `${IMAGE_BASE}turbo.png` },
-    { id: "nos_new", label: "ニトロ新規", icon: `${IMAGE_BASE}nos.png` },
-    { id: "nos_replace", label: "ニトロ交換", icon: `${IMAGE_BASE}nos.png` },
+    { id: "nos_new", label: "ニトロ新規", icon: `${IMAGE_BASE}nos.png`, quantityEnabled: true },
+    { id: "nos_replace", label: "ニトロ交換", icon: `${IMAGE_BASE}nos.png`, quantityEnabled: true },
     { id: "harness", label: "ハーネス", icon: `${IMAGE_BASE}harness.png` },
     { id: "antilag", label: "アンチラグ", icon: `${IMAGE_BASE}antilag.png` },
     { id: "drifttires", label: "ドリフトタイヤ", icon: `${IMAGE_BASE}drifttires.png` },

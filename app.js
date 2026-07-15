@@ -268,8 +268,16 @@ const DEFAULT_COLOR_GUIDE_ENTRIES = [
         category: "ギャング",
         name: "Ｏ h i o",
         accent: "ピンク",
-        details: [{ label: "メイン / サブ", value: "クラシック / RGB(190, 72, 130)" }],
-        swatches: [{ label: "RGB(190, 72, 130)", hex: "#BE4882" }],
+        details: [
+            { label: "メイン", value: "クラシック / RGB(190, 72, 130)" },
+            { label: "サブ", value: "クラシック / ブラック" },
+            { label: "パール", value: "マット / マットブラック" },
+        ],
+        swatches: [
+            { label: "RGB(190, 72, 130)", hex: "#BE4882" },
+            { label: "ブラック", hex: "#0F0F10" },
+            { label: "マットブラック", hex: "#141414" },
+        ],
         pickerRgb: "RGB(190, 72, 130)",
         pickerHex: "#BE4882",
         note: "",
@@ -412,6 +420,23 @@ const DEFAULT_COLOR_GUIDE_ENTRIES = [
         note: "",
         custom: false,
     },
+    {
+        id: "hangure-brown",
+        category: "半グレ",
+        name: "茶色",
+        accent: "茶色",
+        details: [
+            { label: "メイン", value: "マット / ダークアース" },
+            { label: "サブ", value: "マット / ダークアース" },
+            { label: "パール", value: "マット / ブラック" },
+        ],
+        swatches: [
+            { label: "ダークアース", hex: "#5C4B3A" },
+            { label: "ブラック", hex: "#141414" },
+        ],
+        note: "",
+        custom: false,
+    },
 ];
 
 const DEFAULT_NOTES = {
@@ -420,16 +445,24 @@ const DEFAULT_NOTES = {
     updatedAt: "",
 };
 
-const COLOR_GUIDE_SEED_VERSION = "2026-07-04-hangure-reds-momiji-v1";
+const COLOR_GUIDE_SEED_VERSION = "2026-07-16-ohio-brown-v1";
 
 const COLOR_GUIDE_SEED_ENTRIES = [
     {
-        id: "seed-gang-ohio-20260602",
+        id: "seed-gang-ohio-20260716",
         category: "ギャング",
         name: "Ｏ h i o",
         accent: "ピンク",
-        details: [{ label: "メイン / サブ", value: "RGB(190, 72, 130)" }],
-        swatches: [{ label: "RGB(190, 72, 130)", hex: "#BE4882" }],
+        details: [
+            { label: "メイン", value: "クラシック / RGB(190, 72, 130)" },
+            { label: "サブ", value: "クラシック / ブラック" },
+            { label: "パール", value: "マット / マットブラック" },
+        ],
+        swatches: [
+            { label: "RGB(190, 72, 130)", hex: "#BE4882" },
+            { label: "ブラック", hex: "#0F0F10" },
+            { label: "マットブラック", hex: "#141414" },
+        ],
         pickerRgb: "RGB(190, 72, 130)",
         pickerHex: "#BE4882",
         note: "",
@@ -572,6 +605,23 @@ const COLOR_GUIDE_SEED_ENTRIES = [
         note: "",
         custom: true,
     },
+    {
+        id: "seed-hangure-brown-20260716",
+        category: "半グレ",
+        name: "茶色",
+        accent: "茶色",
+        details: [
+            { label: "メイン", value: "マット / ダークアース" },
+            { label: "サブ", value: "マット / ダークアース" },
+            { label: "パール", value: "マット / ブラック" },
+        ],
+        swatches: [
+            { label: "ダークアース", hex: "#5C4B3A" },
+            { label: "ブラック", hex: "#141414" },
+        ],
+        note: "",
+        custom: true,
+    },
 ];
 
 const REMOVED_COLOR_GUIDE_ENTRY_IDS = new Set([
@@ -584,6 +634,7 @@ const REMOVED_COLOR_GUIDE_ENTRY_IDS = new Set([
     "hangure-lavender",
     "seed-hangure-lavender-20260602",
     "seed-gang-momiji-orange-20260704",
+    "seed-gang-ohio-20260602",
 ]);
 
 const REMOVED_COLOR_GUIDE_ENTRY_KEYS = new Set([
